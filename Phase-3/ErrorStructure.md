@@ -35,8 +35,8 @@
       "detail": "Key (email)=(alice@example.com) already exists.",
       "table": "users",
       "constraint": "users_email_key",
-      "hint": null,
-      "position": null,
+      "hint": undefined,
+      "position": undefined,
       "message": "duplicate key value violates unique constraint 'users_email_key'"
       ... // Other properties
   }

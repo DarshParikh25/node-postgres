@@ -29,4 +29,4 @@
 
 # STEPS TO RUN THE FILE
 
-1. `node index.js`
+1. `node Phase-1/index.js`

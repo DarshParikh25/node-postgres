@@ -25,9 +25,9 @@ const main = async () => {
   //   ]
 
   // INSERT
-  //   await pool.query(
-  //     "INSERT INTO customers (cust_id, cust_name) VALUES (5, 'Alisha')"
-  //   );
+  await pool.query(
+    "INSERT INTO customers (cust_id, cust_name) VALUES (5, 'Alisha')"
+  );
 
   // It will insert into the table and selecting all gives the following OUTPUT:
   //   [
@@ -52,6 +52,7 @@ const main = async () => {
 
   // DELETE
   await pool.query("DELETE FROM customers WHERE cust_name = 'Alisha'");
+
   // It will update the table and selecting all gives the following OUTPUT:
   // [
   //   { cust_id: 2, cust_name: 'Kiran' },

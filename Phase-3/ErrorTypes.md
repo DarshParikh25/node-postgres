@@ -30,17 +30,17 @@
 - **Analogy**: you’re **locked out of the library**.
 
 - **Error object (sample)**:
-  ```
+  ```json
   {
-      "name": "error",
-      "length": 111,
-      "severity": "FATAL",
-      "code": "28P01",
-      "message": "password authentication failed for user 'wronguser'",
-      "detail": null,
-      "hint": null,
-      "position": null,
-      "routine": "auth_failed"
+    "name": "error",
+    "length": 111,
+    "severity": "FATAL",
+    "code": "28P01",
+    "message": "password authentication failed for user 'wronguser'",
+    "detail": null,
+    "hint": null,
+    "position": null,
+    "routine": "auth_failed"
   }
   ```
 
@@ -73,7 +73,7 @@
 
 - **Error object (sample)**:
 
-  ```
+  ```javascript
   {
       "name": "error",
       "length": 92,
@@ -90,18 +90,18 @@
 ## Handling them differently:
 
 - In Node.js, you might want to **separate logic**:
-  ```
+  ```javascript
   try {
-      const res = await pool.query("SELECT * FROM userss"); // typo
-      console.log(res.rows);
+    const res = await pool.query("SELECT * FROM userss"); // typo
+    console.log(res.rows);
   } catch (err) {
-      if (err.code === "28P01") {
-          console.error("Connection/authentication issue!");
-      } else if (err.code === "42P01") {
-          console.error("Query issue: table does not exist!");
-      } else {
-          console.error("Unexpected error:", err);
-      }
+    if (err.code === "28P01") {
+      console.error("Connection/authentication issue!");
+    } else if (err.code === "42P01") {
+      console.error("Query issue: table does not exist!");
+    } else {
+      console.error("Unexpected error:", err);
+    }
   }
   ```
 

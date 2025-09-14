@@ -8,14 +8,12 @@
 
 ## Example: try/catch
 
-```
+```javascript
 import { pool } from "./db.js";
 
 async function safeQuery() {
   try {
-    const result = await pool.query(
-      "SELECT * FROM non_existing_table"
-    );
+    const result = await pool.query("SELECT * FROM non_existing_table");
     console.log(result.rows);
   } catch (err) {
     console.error("Database error:", err.message);
@@ -32,15 +30,15 @@ safeQuery();
 
 ## Adding Error Details for Debugging:
 
-```
+```javascript
 try {
   const result = await pool.query("SELECT * FROM users WHERE id = $1", [999]);
   console.log(result.rows);
 } catch (err) {
   console.error({
-    message: err.message,  // human-readable
-    code: err.code,        // Postgres error code
-    detail: err.detail,    // extra info (if available)
+    message: err.message, // human-readable
+    code: err.code, // Postgres error code
+    detail: err.detail, // extra info (if available)
   });
 }
 ```
@@ -49,37 +47,37 @@ try {
 
 - When you’re writing an Express route:
 
-  ```
-  import express from 'express';
-  import { pool } from './db.js'; // your pg pool setup
+  ```javascript
+  import express from "express";
+  import { pool } from "./db.js"; // your pg pool setup
 
   const app = express();
   app.use(express.json());
 
-  app.post('/users', async (req, res) => {
+  app.post("/users", async (req, res) => {
     try {
-        const { name, email } = req.body;
-        const result = await pool.query(
-            'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-            [name, email]
-        );
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        res.status(201).json(result.rows[0]);
+      const { name, email } = req.body;
+      const result = await pool.query(
+        "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *",
+        [name, email]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error('DB error:', err);
+      console.error("DB error:", err);
 
-        // Specific handling by error code
-        if (err.code === '23505') {
-            return res.status(409).json({ error: 'Email already exists' });
-        }
-        if (err.code === '23503') {
-            return res.status(400).json({ error: 'Invalid foreign key reference' });
-        }
+      // Specific handling by error code
+      if (err.code === "23505") {
+        return res.status(409).json({ error: "Email already exists" });
+      }
+      if (err.code === "23503") {
+        return res.status(400).json({ error: "Invalid foreign key reference" });
+      }
 
-        // Generic fallback
-        res.status(500).json({ error: 'Internal server error' });
+      // Generic fallback
+      res.status(500).json({ error: "Internal server error" });
     }
   });
 

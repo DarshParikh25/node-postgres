@@ -8,7 +8,7 @@
 
 ## Example 1: Insert with RETURNING
 
-- ```
+- ```sql
   INSERT INTO users (name, age)
   VALUES ('Bob', 30)
   RETURNING *;
@@ -16,22 +16,22 @@
 
 - This gives you the whole row:
 
-  ```
-  { id: 2, name: "Bob", age: 30 }
+  ```json
+  { "id": 2, "name": "Bob", "age": 30 }
   ```
 
 - In Node.js (`pg`):
-  ```
+  ```javascript
   const result = await pool.query(
-      "INSERT INTO users (name, age) VALUES ($1, $2) RETURNING *",
-      ["Bob", 30]
+    "INSERT INTO users (name, age) VALUES ($1, $2) RETURNING *",
+    ["Bob", 30]
   );
   console.log(result.rows[0]); // OUTPUT: { id: 2, name: "Bob", age: 30 }
   ```
 
 ## Example 2: Update with RETURNING
 
-- ```
+- ```sql
   UPDATE users
   SET age = 31
   WHERE name = 'Bob'
@@ -40,22 +40,22 @@
 
 - Postgres sends back only those columns you asked for.
 
-  ```
-  { name: "Bob", age: 31 }
+  ```json
+  { "name": "Bob", "age": 31 }
   ```
 
 - In Node:
-  ```
+  ```javascript
   const result = await pool.query(
-      "UPDATE users SET age = $1 WHERE name = $2 RETURNING name, age", // parameterized query
-      [31, "Bob"]
+    "UPDATE users SET age = $1 WHERE name = $2 RETURNING name, age", // parameterized query
+    [31, "Bob"]
   );
   console.log(result.rows[0]); // OUTPUT: { name: "Bob", age: 31 }
   ```
 
 ## Example 3: Delete with returning
 
-- ```
+- ```sql
   DELETE FROM users
   WHERE name = 'Bob'
   RETURNING *;
@@ -63,8 +63,8 @@
 
 - You can get the deleted row back:
 
-  ```
-  { id: 2, name: 'Bob', age: 31 }
+  ```json
+  { "id": 2, "name": "Bob", "age": 31 }
   ```
 
 - You could now:
@@ -73,7 +73,7 @@
 
   - Let’s say you have this extra table:
 
-    ```
+    ```sql
     CREATE TABLE deleted_posts_log (
         id SERIAL PRIMARY KEY,
         post_id INT,
@@ -85,7 +85,7 @@
 
   - Now when deleting, you can capture and insert into logs:
 
-    ```
+    ```sql
     WITH deleted AS (
         DELETE FROM posts
         WHERE id = 2
@@ -99,7 +99,7 @@
 
   2. Or temporarily store it so the user can hit Undo and re-insert it.
 
-  - ```
+  - ```sql
       INSERT INTO posts (id, title, content)
       SELECT post_id, title, content
       FROM deleted_posts_log
@@ -110,33 +110,33 @@
 
 - In code (Node.js example):
 
-  ```
+  ```javascript
   // Delete and log
   const deletedPost = await pool.query(
-      `DELETE FROM posts WHERE id = $1 RETURNING *`,
-      [2]
+    `DELETE FROM posts WHERE id = $1 RETURNING *`,
+    [2]
   );
 
   // Save to log
   await pool.query(
-      `INSERT INTO deleted_posts_log (post_id, title, content)
+    `INSERT INTO deleted_posts_log (post_id, title, content)
       VALUES ($1, $2, $3)`,
-      [
-          deletedPost.rows[0].id,
-          deletedPost.rows[0].title,
-          deletedPost.rows[0].content
-      ]
+    [
+      deletedPost.rows[0].id,
+      deletedPost.rows[0].title,
+      deletedPost.rows[0].content,
+    ]
   );
 
   // Later: Undo delete
   await pool.query(
-      `INSERT INTO posts (id, title, content)
+    `INSERT INTO posts (id, title, content)
       VALUES ($1, $2, $3)`,
-      [
-          deletedPost.rows[0].id,
-          deletedPost.rows[0].title,
-          deletedPost.rows[0].content
-      ]
+    [
+      deletedPost.rows[0].id,
+      deletedPost.rows[0].title,
+      deletedPost.rows[0].content,
+    ]
   );
   ```
 

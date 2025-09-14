@@ -3,7 +3,7 @@
 ## 1. Why Parameterized Query?
 
 - If you directly inject variables into SQL, like this:
-  ```
+  ```javascript
   const email = req.body.email; // user input
   const query = `SELECT * FROM users WHERE email = '${email}'`;
   await pool.query(query);
@@ -15,11 +15,11 @@
 - Example of **SQL Injection**:
 
   - Now, imagine a malicious user submits this as the email input:
-    ```
+    ```sql
     ' OR 1=1; --
     ```
     - The resulting query becomes:
-      ```
+      ```sql
       SELECT * FROM users WHERE email = '' OR 1=1; --';
       ```
       - `OR 1=1` → always true → returns all rows.
@@ -31,12 +31,9 @@
 
 - Now, with parameterized queries:
 
-  ```
+  ```javascript
   const email = req.params.email; // user input
-  const res = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email]
-  );
+  const res = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
   ```
 
   - Explanation:
@@ -48,7 +45,7 @@
 - If the user submits `"' OR 1=1; --"`, Postgres does not treat it as part of SQL.
 - Instead, it treats it as a plain string value:
 
-  ```
+  ```sql
   SELECT * FROM users WHERE email = ''' OR 1=1; --';
   ```
 
@@ -58,10 +55,10 @@
 
 ## 3. Multiple Parameters
 
-- ```
+- ```javascript
   const res = await pool.query(
     "SELECT * FROM users WHERE name = $1 AND age = $2",
-    ['Alice', 25]
+    ["Alice", 25]
   );
   ```
   - `$1` → 'Alice'
@@ -71,29 +68,26 @@
 
 1.  INSERT:
 
-    ```
-    await pool.query(
-        "INSERT INTO users (name, age) VALUES ($1, $2)",
-        ['Charlie', 23]
-    );
+    ```javascript
+    await pool.query("INSERT INTO users (name, age) VALUES ($1, $2)", [
+      "Charlie",
+      23,
+    ]);
     ```
 
 2.  UPDATE:
 
-    ```
-    await pool.query(
-        "UPDATE users SET age = $1 WHERE name = $2",
-        [24, 'Charlie']
-    );
+    ```javascript
+    await pool.query("UPDATE users SET age = $1 WHERE name = $2", [
+      24,
+      "Charlie",
+    ]);
     ```
 
 3.  DELETE:
 
-    ```
-    await pool.query(
-        "DELETE FROM users WHERE name = $1",
-        ['Charlie']
-    );
+    ```javascript
+    await pool.query("DELETE FROM users WHERE name = $1", ["Charlie"]);
     ```
 
 ## 5. Key Benefits

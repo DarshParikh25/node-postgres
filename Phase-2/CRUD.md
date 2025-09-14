@@ -4,7 +4,7 @@
 
 - Let’s assume this table exists in your database:
 
-  ```
+  ```sql
   CREATE TABLE users (
       id SERIAL PRIMARY KEY,
       name VARCHAR(50),
@@ -30,38 +30,37 @@
 
 1. **Setup**:
 
-   ```
-   import pkg from 'pg';
-   const { Pool } = pkg;
+   ```javascript
+   import { Pool } from "pg";
 
    const pool = new Pool({
-       user: process.env.DB_USER,
-       host: process.env.DB_HOST,
-       database: process.env.DB_NAME,
-       password: process.env.DB_PASSWORD,
-       port: process.env.DB_PORT,
+     user: process.env.DB_USER,
+     host: process.env.DB_HOST,
+     database: process.env.DB_NAME,
+     password: process.env.DB_PASSWORD,
+     port: process.env.DB_PORT,
    });
    ```
 
 2. **SELECT (Read Data)**:
 
-   ```
-   const res = await pool.query('SELECT * FROM users');
+   ```javascript
+   const res = await pool.query("SELECT * FROM users");
    console.log(res.rows);
    ```
 
    - Example output:
 
-     ```
+     ```javascript
      [
-         { id: 1, name: 'Alice', age: 25 },
-         { id: 2, name: 'Bob', age: 30 }
-     ]
+       { id: 1, name: "Alice", age: 25 },
+       { id: 2, name: "Bob", age: 30 },
+     ];
      ```
 
 3. **INSERT (Create new row)**:
 
-   ```
+   ```javascript
    await pool.query("INSERT INTO users (name, age) VALUES ('Alice', 25)");
    ```
 
@@ -70,7 +69,7 @@
 
 4. **UPDATE (Modify existing row)**:
 
-   ```
+   ```javascript
    await pool.query("UPDATE users SET age = 26 WHERE name = 'Alice'");
    ```
 
@@ -79,7 +78,7 @@
 
 5. **DELETE (Remove row)**:
 
-   ```
+   ```javascript
    await pool.query("DELETE FROM users WHERE name = 'Alice'");
    ```
 

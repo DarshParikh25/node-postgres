@@ -2,21 +2,21 @@
 
 - When you run:
 
-  ```
+  ```javascript
   const res = await client.query("SELECT NOW()");
   ```
 
 - You get an object like:
-  ```
+  ```json
   {
-    command: 'SELECT',
-    rowCount: 2,
-    oid: null,
-    rows: [ // Actual table records (rows)
-        { id: 1, name: 'Alice' },
-        { id: 2, name: 'Bob' }
+    "command": "SELECT",
+    "rowCount": 2,
+    "oid": null,
+    "rows": [ // Actual table records (rows)
+        { "id": 1, "name": "Alice" },
+        { "id": 2, "name": "Bob" }
     ],
-    fields: [ ... ]
+    "fields": [ ... ]
   }
   ```
 
@@ -28,8 +28,8 @@
    - Always an array of objects.
    - Keys = column names, values = values from the table.
    - Example:
-     ```
-     [ { id: 1, name: 'Alice' } ]
+     ```javascript
+     [{ id: 1, name: "Alice" }];
      ```
 
 2. **res.rowCount**:
@@ -55,9 +55,9 @@
    - Metadata about the columns returned.
    - Each item has info like `name, dataTypeID`, etc.
    - Example:
-     ```
+     ```javascript
      [
-         { name: 'id', dataTypeID: 23 },
-         { name: 'name', dataTypeID: 25 }
-     ]
+       { name: "id", dataTypeID: 23 },
+       { name: "name", dataTypeID: 25 },
+     ];
      ```

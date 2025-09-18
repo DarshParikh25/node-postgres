@@ -67,7 +67,7 @@ transferMoney(1, 2, 1000);
   3. Add $1000 to Kim (still tentative).
   4. If both succeed → `COMMIT`.
   - Peter has $1000 less.
-  - Kim has ₹100 more.
+  - Kim has $1000 more.
   5. If any query fails → `ROLLBACK`.
   - Both accounts remain untouched.
 

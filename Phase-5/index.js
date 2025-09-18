@@ -31,5 +31,10 @@ const getAllUsers = async () => {
   console.log(res.rows);
 };
 
+const shutdown = async () => {
+  console.log("Closing pool...");
+  await pool.end();
+};
+
 addUser(7, "Sujal");
-getAllUsers();
+getAllUsers().then(shutdown); // Call only when your entire app shuts down

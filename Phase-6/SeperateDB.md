@@ -39,7 +39,7 @@ export default pool;
 
   ```javascript
   // app.js
-  import pool from "./db";
+  import pool from "./db.js";
 
   async function testQuery() {
     try {

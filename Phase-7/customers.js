@@ -12,11 +12,11 @@ const getCustomers = async (_, res) => {
 
 // Create a new customer
 const createCustomer = async (req, res) => {
-  const { id, name } = req.body;
+  const { id, cust_name } = req.body;
   try {
     const result = await pool.query(
       "INSERT INTO customers (cust_id, cust_name) VALUES ($1, $2) RETURNING *",
-      [id, name]
+      [id, cust_name]
     );
     res.json(result.rows[0]);
   } catch (err) {

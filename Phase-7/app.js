@@ -1,5 +1,7 @@
 import express from "express";
+
 import { createCustomer, getCustomers, updateCustomer } from "./customers.js";
+import welcomeVoucher from "./welcomeVoucher.js";
 import {
   createOrder,
   deleteOrder,
@@ -13,6 +15,7 @@ app.use(express.json());
 const PORT = 3000;
 
 app.post("/customers", createCustomer);
+app.post("/customer-with-voucher", welcomeVoucher);
 app.get("/customers", getCustomers);
 app.put("/customers/:id", updateCustomer);
 

@@ -59,7 +59,7 @@ app.post("/users-with-task", async (req, res) => {
 2. **Force Error**: Insert a duplicate email (unique constraint) → rollback both user + task.
 3. **DB Crash Simulation**: Kill transaction in the middle → rollback ensures no partial data.
 
-## Key Takeaways:
+### Key Takeaways:
 
 1. Transactions ensure **data consistency**.
 2. Always use `try/catch` with `ROLLBACK` in case of failure.
